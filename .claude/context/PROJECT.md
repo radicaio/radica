@@ -72,8 +72,9 @@ If these two hold up and are *publicly legible*, Radica has a real wedge.
 
 When starting a new Claude session about Radica, load:
 
-1. `docs/context/PROJECT.md` — this file
-2. `docs/context/PLAN.md` — MVP plan v0.1
-3. `docs/context/DECISIONS.md` — decisions log
-4. Any relevant `docs/context/RESEARCH/*.md`
-5. Latest `docs/context/SESSIONS/*.md` for in-flight work
+1. `.claude/context/PROJECT.md` — this file
+2. `.claude/context/PLAN.md` — MVP plan v0.1
+3. `.claude/context/DECISIONS.md` — decisions log
+4. `docs/GO_TIGER_STYLE.md` — coding standard
+5. Any relevant `.claude/context/RESEARCH/*.md`
+6. Latest `.claude/context/SESSIONS/*.md` for in-flight work

@@ -12,7 +12,7 @@
 ## What happened, in order
 
 1. **Shared the v0.1 MVP plan.** The full plan is now persisted at
-   `docs/context/PLAN.md`.
+   `.claude/context/PLAN.md`.
 
 2. **Discussed value proposition.**
    - Lead use case (distributed rate limiting) is well-chosen.
@@ -50,14 +50,14 @@
    - Raft-vs-VSR writeup remains a P0 deliverable for launch narrative.
 
 7. **Did DST research & architecture overview.**
-   - Full primer persisted at `docs/context/RESEARCH/dst-primer.md`.
+    - Full primer persisted at `.claude/context/RESEARCH/dst-primer.md`.
    - Reading list included.
    - Go-specific hazards catalogued.
 
 8. **Inspected TigerBeetle source as reference.**
    - Local copy at `/Users/inelpandzic/Dev/Workspace/IP/tigerbeetle`.
    - Full architecture lessons persisted at
-     `docs/context/RESEARCH/tigerbeetle-map.md`, including:
+      `.claude/context/RESEARCH/tigerbeetle-map.md`, including:
      - Layout to steal
      - Key source files to study (in order)
      - Lessons (per-link state, fault atlas, three exit codes, two-phase run,
@@ -65,7 +65,7 @@
      - Zig → Go idiom mapping
      - Refinements to the MVP plan
 
-9. **Bootstrapped `docs/context/` structure.** This note + PROJECT.md,
+9. **Bootstrapped `.claude/context/` structure.** This note + PROJECT.md,
    PLAN.md, DECISIONS.md, RESEARCH/dst-primer.md, RESEARCH/tigerbeetle-map.md.
 
 ## Where we are in the plan
@@ -123,10 +123,10 @@ Pick one to kick off the next session:
 
 Paste into Claude at session start:
 
-> I'm working on Radica. Read `docs/context/PROJECT.md`, `docs/context/PLAN.md`,
-> `docs/context/DECISIONS.md`, then the most recent file in
-> `docs/context/SESSIONS/`. If relevant to my question, also read files under
-> `docs/context/RESEARCH/`.
+> I'm working on Radica. Read `.claude/context/PROJECT.md`, `.claude/context/PLAN.md`,
+> `.claude/context/DECISIONS.md`, then the most recent file in
+> `.claude/context/SESSIONS/`. If relevant to my question, also read files under
+> `.claude/context/RESEARCH/`.
 
 Or, if using Claude Code with this repo as workspace, a future `CLAUDE.md` at
 the repo root (not yet created) will auto-load the right entry points.

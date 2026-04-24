@@ -1,0 +1,44 @@
+# Experiments / scratch
+experiments/
+
+# Claude Code local settings (keep .claude/context/ tracked)
+.claude/settings.local.json
+
+# Go build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/bin/
+/dist/
+
+# Go coverage / profiling
+*.cover
+coverage.txt
+coverage.html
+*.prof
+*.pprof
+cpu.out
+mem.out
+
+# Go workspace
+go.work
+go.work.sum
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+.env.*
+!.env.example
