@@ -16,13 +16,6 @@ distributed locks. Consensus: VSR.
 
 4. `docs/GO_TIGER_STYLE.md` — coding standard; all code must conform
 
-## Read when relevant
-
-- `.claude/context/RESEARCH/dst-primer.md` — DST methodology, reading list,
-  Go-specific hazards
-- `.claude/context/RESEARCH/tigerbeetle-map.md` — TigerBeetle → Radica lessons,
-  Zig→Go idiom map, layered-checker design
-
 ## Operating rules
 
 - **Cross-cutting practices** (once coding starts):
