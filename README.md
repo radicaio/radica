@@ -14,4 +14,4 @@ Pre-v0.1. Under active development.
 - **DST-first.** DST (Deterministic Simulation Testing): the core is a pure `(state, event) → (state', effects)` function; all I/O is interfaced. Bugs are reproducible from a seed.
 - **Go Tiger-style.** Zero-alloc hot paths, no `interface{}` in core, predictable tail latency. See [docs/GO_TIGER_STYLE.md](docs/GO_TIGER_STYLE.md).
 - **GC-free data plane.** KV pairs live in pre-allocated arenas, not the Go heap. The GC never scans them.
-- **Viewstamped Replication consensus.** Memory-only replication in v0.1.
+- **Viewstamped Replication consensus.** 

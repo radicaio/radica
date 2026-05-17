@@ -1,5 +1,7 @@
 # CLAUDE.md — Entry point for Claude Code sessions
 
+For every answer keep it short, I'll ask for details if I need them.
+
 > This file is always-on context. Keep it short. Deeper material lives under
 > `.claude/context/`. Human-facing documentation (e.g. the style guide) lives
 > under `docs/`.
@@ -8,15 +10,11 @@
 
 DST-verified, tiger-style distributed coordination cache for Go.
 Lead use case: distributed rate limiting. Secondary: idempotency keys,
-distributed locks. Consensus: VSR. Budget: 10–14 months solo.
+distributed locks. Consensus: VSR. 
 
 ## Always read these first
 
-1. `.claude/context/PROJECT.md` — stable project identity, non-goals, positioning
-2. `.claude/context/PLAN.md` — v0.1 MVP plan (all phases)
-3. `.claude/context/DECISIONS.md` — decisions log (ADR-lite)
 4. `docs/GO_TIGER_STYLE.md` — coding standard; all code must conform
-5. The latest file under `.claude/context/SESSIONS/` — in-flight work & next steps
 
 ## Read when relevant
 
