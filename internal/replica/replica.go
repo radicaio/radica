@@ -67,5 +67,5 @@ func (r *Replica) Tick() {
 // Runs on the loop goroutine.
 func (r *Replica) onRequest(req transport.Request) {
 	reply := r.sm.Apply(req.Op, r.clock.Now())
-	r.transport.Send(transport.Outbound{Client: req.Client, Reply: reply})
+	r.transport.Send(transport.Reply{RequestID: req.ID, Reply: reply})
 }

@@ -18,23 +18,19 @@ import (
 	nethttp "net/http"
 	"strings"
 
+	"github.com/radicaio/radica/internal/transport"
 	"github.com/radicaio/radica/internal/wire"
 )
 
-// Submitter is the subset of the transport this server needs.
-type Submitter interface {
-	Submit(op wire.Op) <-chan wire.Reply
-}
-
 // Server is the HTTP handler.
 type Server struct {
-	mux *nethttp.ServeMux
-	sub Submitter
+	mux       *nethttp.ServeMux
+	transport *transport.Transport
 }
 
 // NewServer wires routes and returns a ready-to-serve handler.
-func NewServer(sub Submitter) *Server {
-	s := &Server{mux: nethttp.NewServeMux(), sub: sub}
+func NewServer(tp *transport.Transport) *Server {
+	s := &Server{mux: nethttp.NewServeMux(), transport: tp}
 	s.mux.HandleFunc("/healthz", s.healthz)
 	s.mux.HandleFunc("/kv/", s.kv)
 	return s
@@ -75,7 +71,7 @@ func (s *Server) kv(w nethttp.ResponseWriter, r *nethttp.Request) {
 }
 
 func (s *Server) doGet(w nethttp.ResponseWriter, ctx context.Context, key []byte) {
-	reply, err := s.wait(ctx, wire.Op{Code: wire.OpGet, Key: key})
+	reply, err := s.submit(ctx, wire.Op{Code: wire.OpGet, Key: key})
 	if err != nil {
 		nethttp.Error(w, err.Error(), nethttp.StatusGatewayTimeout)
 		return
@@ -91,7 +87,7 @@ func (s *Server) doGet(w nethttp.ResponseWriter, ctx context.Context, key []byte
 }
 
 func (s *Server) doSet(w nethttp.ResponseWriter, ctx context.Context, key, value []byte) {
-	reply, err := s.wait(ctx, wire.Op{Code: wire.OpSet, Key: key, Value: value})
+	reply, err := s.submit(ctx, wire.Op{Code: wire.OpSet, Key: key, Value: value})
 	if err != nil {
 		nethttp.Error(w, err.Error(), nethttp.StatusGatewayTimeout)
 		return
@@ -104,7 +100,7 @@ func (s *Server) doSet(w nethttp.ResponseWriter, ctx context.Context, key, value
 }
 
 func (s *Server) doDelete(w nethttp.ResponseWriter, ctx context.Context, key []byte) {
-	reply, err := s.wait(ctx, wire.Op{Code: wire.OpDelete, Key: key})
+	reply, err := s.submit(ctx, wire.Op{Code: wire.OpDelete, Key: key})
 	if err != nil {
 		nethttp.Error(w, err.Error(), nethttp.StatusGatewayTimeout)
 		return
@@ -119,8 +115,8 @@ func (s *Server) doDelete(w nethttp.ResponseWriter, ctx context.Context, key []b
 	}
 }
 
-func (s *Server) wait(ctx context.Context, op wire.Op) (wire.Reply, error) {
-	ch := s.sub.Submit(op)
+func (s *Server) submit(ctx context.Context, op wire.Op) (wire.Reply, error) {
+	ch := s.transport.Submit(op)
 	select {
 	case reply := <-ch:
 		return reply, nil

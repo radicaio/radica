@@ -16,20 +16,21 @@ import (
 	"github.com/radicaio/radica/internal/wire"
 )
 
-// ClientID identifies the origin of a request. Replies are routed back
-// to the same ClientID. One request gets one fresh ClientID in MVP.
-type ClientID uint64
+// RequestID identifies one request in flight. Replies are routed back
+// to the same RequestID. One Submit allocates one fresh RequestID; IDs
+// are never reused.
+type RequestID uint64
 
-// Request is one inbound op plus the client it came from.
+// Request is one inbound op plus the request identifier it was assigned.
 type Request struct {
-	Client ClientID
-	Op     wire.Op
+	ID RequestID
+	Op wire.Op
 }
 
-// Outbound is one reply plus the client to route it to.
-type Outbound struct {
-	Client ClientID
-	Reply  wire.Reply
+// Reply is one reply plus the request it answers.
+type Reply struct {
+	RequestID RequestID
+	Reply     wire.Reply
 }
 
 // Handler is the replica-side receive callback. The transport calls it
@@ -44,20 +45,20 @@ type Transport struct {
 	handler Handler
 
 	mu      sync.Mutex
-	pending []pending
-	replies map[ClientID]chan wire.Reply
-	nextID  ClientID
+	pending []request
+	replies map[RequestID]chan wire.Reply
+	nextID  RequestID
 }
 
-type pending struct {
-	client ClientID
-	op     wire.Op
+type request struct {
+	id RequestID
+	op wire.Op
 }
 
 // New returns an empty Transport.
 func New() *Transport {
 	return &Transport{
-		replies: make(map[ClientID]chan wire.Reply),
+		replies: make(map[RequestID]chan wire.Reply),
 	}
 }
 
@@ -72,18 +73,18 @@ func (t *Transport) Submit(op wire.Op) <-chan wire.Reply {
 	t.nextID++
 	id := t.nextID
 	t.replies[id] = ch
-	t.pending = append(t.pending, pending{client: id, op: op})
+	t.pending = append(t.pending, request{id: id, op: op})
 	t.mu.Unlock()
 	return ch
 }
 
 // Send delivers a reply to the waiting caller. Called by the replica on
 // the loop goroutine.
-func (t *Transport) Send(out Outbound) {
+func (t *Transport) Send(out Reply) {
 	t.mu.Lock()
-	ch, ok := t.replies[out.Client]
+	ch, ok := t.replies[out.RequestID]
 	if ok {
-		delete(t.replies, out.Client)
+		delete(t.replies, out.RequestID)
 	}
 	t.mu.Unlock()
 	if ok {
@@ -99,9 +100,9 @@ func (t *Transport) Tick() {
 	t.pending = nil
 	t.mu.Unlock()
 
-	for _, p := range batch {
+	for _, r := range batch {
 		if t.handler != nil {
-			t.handler(Request{Client: p.client, Op: p.op})
+			t.handler(Request{ID: r.id, Op: r.op})
 		}
 	}
 }
